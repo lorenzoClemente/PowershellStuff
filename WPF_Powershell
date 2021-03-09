@@ -1,0 +1,155 @@
+# Need to test thread Hash, to use Progress Bar as to allow more task within Gui....
+$inputXML = @"
+<Window x:Class="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp4"
+        mc:Ignorable="d"
+        Title="Installer" Height="450" Width="800">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                 <GradientStop Color="Black" Offset="0"/>
+                 <GradientStop Color="#FF382D2D" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <ListBox x:Name="listbox1" HorizontalAlignment="Left" Height="399" Margin="10,11,0,0" VerticalAlignment="Top" Width="239" Background="#FFFDF5F5">
+            <CheckBox x:Name="Checkbox100" Content="unknown"/>
+            <CheckBox x:Name="Checkbox1" Content="Anaconda"/>
+            <CheckBox x:Name="Checkbox2" Content="Adobe"/>
+            <CheckBox x:Name="Checkbox3" Content="unknown"/>
+            <CheckBox x:Name="Checkbox4" Content="unknown"/>
+            <CheckBox x:Name="Checkbox5" Content="ContactMonkey"/>
+            <CheckBox x:Name="Checkbox6" Content="DataWare (Click Ok )"/>
+            <CheckBox x:Name="Checkbox7" Content="unknown"/>
+            <CheckBox x:Name="Checkbox8" Content="FireFox"/>
+            <CheckBox x:Name="Checkbox9" Content="unknown"/>
+            <CheckBox x:Name="Checkbox10" Content="unknown"/>
+            <CheckBox x:Name="Checkbox11" Content="unknown"/>
+            <CheckBox x:Name="Checkbox40" Content="Git For Windows"/>
+            <CheckBox x:Name="Checkbox41" Content="Git Extension"/>
+            <CheckBox x:Name="Checkbox12" Content="Google Chrome"/>
+            <CheckBox x:Name="Checkbox13" Content="GreenShot"/>
+            <CheckBox x:Name="Checkbox14" Content="unknown"/>
+            <CheckBox x:Name="Checkbox15" Content="unknown"/>
+            <CheckBox x:Name="Checkbox16" Content="unknown"/>
+            <CheckBox x:Name="Checkbox17" Content="Java 8 202"/>
+            <CheckBox x:Name="Checkbox18" Content="Java 8 144, (not working properly)"/>
+            <CheckBox x:Name="Checkbox19" Content="unknown(Requires Testing)."/>
+            <CheckBox x:Name="Checkbox20" Content="Mac Update"/>
+            <CheckBox x:Name="Checkbox21" Content="Oracle 32 bit 12"/>
+            <CheckBox x:Name="Checkbox22" Content="Oracle 64 bit 12"/>
+            <CheckBox x:Name="Checkbox23" Content="unknownn"/>
+            <CheckBox x:Name="Checkbox24" Content="Python3.7.4"/>
+            <CheckBox x:Name="Checkbox25" Content="PL/SQL Developer 11"/>
+            <CheckBox x:Name="Checkbox43" Content="PL/SQL Developer 12 32bit"/>
+            <CheckBox x:Name="Checkbox44" Content="PL/SQL Developer 12 64bit"/>
+            <CheckBox x:Name="Checkbox38" Content="RealVnc"/>
+            <CheckBox x:Name="Checkbox39" Content="RealVnc Enterprise"/>
+            <CheckBox x:Name="Checkbox26" Content="SpotFire"/>
+            <CheckBox x:Name="Checkbox27" Content="SuperPutty"/>
+            <CheckBox x:Name="Checkbox28" Content="Strawberry"/>
+            <CheckBox x:Name="Checkbox29" Content="Sap Gui Workstation"/>
+            <CheckBox x:Name="Checkbox30" Content="Sap Gui Business "/>
+            <CheckBox x:Name="Checkbox277" Content="unknown"/>
+            <CheckBox x:Name="Checkbox31" Content="unknown"/>
+            <CheckBox x:Name="Checkbox32" Content="unknown"/>
+            <CheckBox x:Name="Checkbox33" Content="unknown"/>
+            <CheckBox x:Name="Checkbox34" Content="unknown"/>
+            <CheckBox x:Name="Checkbox35" Content="WinScp"/>
+            <CheckBox x:Name="Checkbox36" Content="WedgeWare"/>
+            <CheckBox x:Name="Checkbox45" Content="Webex"/>
+            <CheckBox x:Name="Checkbox80" Content="Webex Meeting "/>
+            <CheckBox x:Name="Checkbox55" Content="Webex Plugin"/>
+            <CheckBox x:Name="Checkbox37" Content="7-Zip"/>
+            
+
+        </ListBox>
+        <Button x:Name="Button1" Content="Start" HorizontalAlignment="Left" Margin="285,317,0,0" VerticalAlignment="Top" Width="92" Height="39"/>
+        <Image HorizontalAlignment="Left" Height="292" Margin="291,0,0,0" VerticalAlignment="Top" Width="481" Source="\\share\D\Powershell\PowershellBetaV3\Img\cat.png"/>
+        <Label Content="Developed by Lorenzo Clemente" HorizontalAlignment="Left" Margin="598,376,0,0" VerticalAlignment="Top" Width="184"/>
+        <Label x:Name="label1" Content="" HorizontalAlignment="Left" Margin="265,384,0,0" VerticalAlignment="Top" Width="171"/>
+        <ProgressBar x:Name="barName" HorizontalAlignment="Left" Height="22" Margin="265,384,0,0" VerticalAlignment="Top" Width="284" IsIndeterminate="True" Minimum="0" Maximum="100" />
+        <Button x:Name="LazyBut" Content="Laptop Batch" HorizontalAlignment="Left" Margin="473,300,0,0" VerticalAlignment="Top" Width="112" Height="23"  RenderTransformOrigin="0.153,-0.128"/>
+        <Button x:Name="desktop" Content="Desktop Batch" HorizontalAlignment="Left" Margin="637,300,0,0" VerticalAlignment="Top" Width="112" Height="23"/>
+        <Button x:Name="wifi" Content="Wifi Fixed" HorizontalAlignment="Left" Margin="473,341,0,0" VerticalAlignment="Top" Width="112"/>
+        <Button x:Name="bitlock" Content="Bitlocker/Password " HorizontalAlignment="Left" Margin="637,341,0,0" VerticalAlignment="Top" Width="112"/>
+
+    </Grid>
+</Window>
+"@
+  
+  #Thank you FoxDeploy for this one.
+  https://foxdeploy.com/
+  
+  #This finds all key words
+$inputXML = $inputXML -replace 'mc:Ignorable="d"','' -replace "x:N",'N' -replace '^<Win.*', '<Window'
+[void][System.Reflection.Assembly]::LoadWithPartialName('presentationframework')
+[xml]$XAML = $inputXML
+
+#This one read XML, No Idea how this works and will require futher inspection
+ 
+$reader=(New-Object System.Xml.XmlNodeReader $xaml)
+
+try{
+    $Form=[Windows.Markup.XamlReader]::Load( $reader )
+    }
+catch{
+    Write-Warning "There seems to be an error somewhere contact Lorenzo Clemente, screenshot all cmd error send it to x1052884@ti.com"
+    throw
+    }
+#This kind of add the WPF to each variable name given in the gui so we may use it in Powershell.
+
+$xaml.SelectNodes("//*[@Name]") | %{Set-Variable -Name "WPF$($_.Name)" -Value $Form.FindName($_.Name)}
+
+#this shows avaiable variables that are renamed
+    
+
+#Enter information related to Checkbox, need to figure out how it works.
+
+
+
+$ClickOnThis={  
+    
+   #7-zip
+    if ($WPFCheckbox37.isChecked -eq $true){
+        start-Process "\\sharedrive\7-zip" -ArgumentList "/S"  -wait
+        $WPFCheckbox37.isChecked = $false
+        Write-Host "7-zip Installed"
+    }else{
+    }
+
+
+$lazyButton ={
+    
+   start-Process "\\share\D\Powershell\PowershellBetaV3\TestinglabDoNotTouch\Testrun1.bat"
+
+
+}
+
+$desktoprun = {
+    start-Process "\\share\D\Powershell\PowershellBetaV3\TestinglabDoNotTouch\Testrun2.bat"
+
+}
+
+$lockButton = {
+    start-process "\\share\D\Powershell\PowershellBetaV3\TestinglabDoNotTouch\verify.bat"
+
+}
+
+
+#This calls the VAriablle
+$WPFbutton1.Add_Click($ClickOnThis)
+$WPF
+
+$WPFLazybut.Add_Click($lazyButton)
+
+$WPFdesktop.Add_Click($desktoprun)
+
+$WPFbitlock.Add_Click($lockButton)
+
+
+#This is what turns on the gui, without it nothing works.
+$Form.ShowDialog() | out-null
