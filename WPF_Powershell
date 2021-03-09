@@ -97,8 +97,8 @@ try{
     $Form=[Windows.Markup.XamlReader]::Load( $reader )
     }
 catch{
-    Write-Warning "There seems to be an error somewhere contact Lorenzo Clemente, screenshot all cmd error send it to x1052884@ti.com"
-    throw
+    Write-Warning "There seems to be an error somewhere contact Lorenzo Clemente, screenshot all cmd error send it to ."
+    
     }
 #This kind of add the WPF to each variable name given in the gui so we may use it in Powershell.
 
