@@ -1,4 +1,4 @@
-Start-Process "\\coderank\f\ZPowerShellTest\NHO2022BUILD\DoNotTouch\BatTest.bat"
+Start-Process "Files"
 
 $inputXML = @"
 <Window x:Class="NHOBuild.MainWindow"
