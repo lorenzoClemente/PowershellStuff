@@ -1,0 +1,215 @@
+Start-Process "\\coderank\f\ZPowerShellTest\NHO2022BUILD\DoNotTouch\BatTest.bat"
+
+$inputXML = @"
+<Window x:Class="NHOBuild.MainWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:local="clr-namespace:NHOBuild"
+            mc:Ignorable="d"
+            Title="MainWindow" Height="590" Width="850"
+            Background="#AAAAAA"
+            WindowStyle="SingleBorderWindow"
+            ResizeMode="NoResize">
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key="WhiteLayout">
+            <GradientStop Color="#FFFFFF"/>
+
+        </LinearGradientBrush>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="{StaticResource WhiteLayout}"/>
+            <Setter Property="Width" Value="105"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Height" Value="71"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" ClipToBounds="True">
+                            <!--Outer Rec -->
+                            <Rectangle x:Name="outerRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="{TemplateBinding Background}" Fill="white" RadiusX="20" RadiusY="20" />
+                            <Rectangle x:Name="innerRectangle" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stroke="Transparent" StrokeThickness="20" Fill="{TemplateBinding Background}" RadiusX="35" RadiusY="25" />
+                            <DockPanel Name="myContentPanel">
+                                <ContentPresenter x:Name="myContent" Margin="20" Content="{TemplateBinding Content}" TextBlock.Foreground="black"/>
+
+                            </DockPanel>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Rectangle.Stroke" TargetName="outerRectangle" Value="DarkBlue"/>
+
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Rectangle.Stroke" TargetName="outerRectangle" Value="LightBlue"/>
+                            </Trigger>
+                            <EventTrigger RoutedEvent="Mouse.MouseDown" >
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation  />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+
+    </Window.Resources>
+
+
+
+
+    <Grid Margin="10,0,0,-6">
+
+        <Button x:Name="Button1" Content="Analog &#xD;&#xA;" HorizontalAlignment="Left" Margin="55,103,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.524,0.439"   />
+        <Button x:Name="Button2" Content=" COMMS&#xA;" HorizontalAlignment="Left" Margin="211,103,0,0" VerticalAlignment="Top"   />
+        <Button x:Name="Button3" Content=" Creation" HorizontalAlignment="Center" Margin="0,103,0,0" VerticalAlignment="Top" />
+        <Button x:Name="Button4" Content="Digital &#xD;&#xA;Design Eng" HorizontalAlignment="Left" Margin="55,214,0,0" VerticalAlignment="Top" />
+        <Button x:Name="Button5" Content="  Facilities&#xA;" HorizontalAlignment="Left" Margin="211,211,0,0" VerticalAlignment="Top" />
+        <Button x:Name="Button6" Content="     O" HorizontalAlignment="Left" Margin="529,103,0,0" VerticalAlignment="Top" />
+        <Button x:Name="Button7" Content="      HR&#xA;" HorizontalAlignment="Left" Margin="695,214,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.523,0.629"/>
+        <Button x:Name="Button8" Content="      IT&#xD;&#xA;" HorizontalAlignment="Left" Margin="529,214,0,0" VerticalAlignment="Top"  />
+        <Button x:Name="Button9"  Content="Process&#xA;Engineering&#xD;&#xA;" HorizontalAlignment="Left" Margin="695,103,0,0" VerticalAlignment="Top"  />
+        <Button x:Name="Button10" Content="Product&#xD;&#xA;" HorizontalAlignment="Left" Margin="55,329,0,0" VerticalAlignment="Top" />
+        <Button x:Name="Button11" Content="Sales" HorizontalAlignment="Left" Margin="211,329,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.501,0.553" />
+        <Button x:Name="Button12" Content="Software&#xD;&#xA;Engineering" HorizontalAlignment="Center" Margin="0,211,0,0" VerticalAlignment="Top"  />
+        <Button x:Name="Button13" Content="Test" HorizontalAlignment="Left" Margin="695,329,0,0" VerticalAlignment="Top" />
+        <Button x:Name="Button14" Content=" MAKE" HorizontalAlignment="Center" Margin="0,329,0,0" VerticalAlignment="Top" />
+        <Button x:Name="Button15" Content=" &#xD;&#xA;MAKE" HorizontalAlignment="Left" Margin="529,329,0,0" VerticalAlignment="Top"  />
+        <Button x:Name="Button16" Content="  Validation&#xD;&#xA;&#xD;&#xA;" Width="98" Margin="55,447,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <Button x:Name="Button17" Content="WPL" Width="98" Margin="0,447,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" />
+        <Button x:Name="Button18" Content="  Standard&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" HorizontalAlignment="Left"  Margin="211,446,0,0"  VerticalAlignment="Top" />
+
+        <Image x:Name="ImgBottom" Source="start-process "$File""/>
+        <Image x:Name="ImgTop" Source="start-process "$File"" />
+    </Grid>
+</Window>
+
+
+"@
+
+$inputXML = $inputXML -replace 'mc:Ignorable="d"','' -replace "x:N",'N' -replace '^<Win.*', '<Window'
+
+[void][System.Reflection.Assembly]::LoadWithPartialName('presentationframework')
+
+[xml]$XAML = $inputXML
+
+
+ 
+$reader=(New-Object System.Xml.XmlNodeReader $xaml)
+
+try{
+    $Form=[Windows.Markup.XamlReader]::Load( $reader )
+    }
+catch{
+    Write-Warning "There seems to be an error somewhere contact Lorenzo , screenshot all cmd error send it to "
+    throw
+    }
+#This kind of add the WPF to each variable name given in the gui so we may use it in Powershell.
+
+$xaml.SelectNodes("//*[@Name]") | %{Set-Variable -Name "WPF$($_.Name)" -Value $Form.FindName($_.Name)}
+
+# out to make button into a list while having the gui be interactive ...
+
+#stanAccount
+$stanClick = {
+    start-process "$File"
+}
+
+$anaClick = {
+    start-process "$File"
+}
+
+$CommClick = {
+
+}
+
+$DemanClick = {
+
+}
+
+$DigitalClick = {
+    start-process "$File"
+
+}
+
+$FaciClick = {
+
+}
+
+$FOClick = {
+
+}
+
+$HrClick={
+    start-process "$File"
+}
+
+$ITClick={
+    start-process "$File"
+}
+
+$ProcessClick = {
+    start-process "$File"
+}
+
+
+$ProductClick = {
+
+}
+
+$SalesClick = {
+
+}
+
+$SoftwareClick = {
+
+}
+
+$TestClick = {
+
+}
+
+$GMakeClick = {
+
+}
+
+$NonClick = {
+
+}
+
+$ValiClick = {
+
+}
+
+$WClick = {
+}
+
+
+
+$WPFButton1.Add_Click($anaClick)
+$WPFButton2.Add_Click($CommClick)
+$WPFButton3.Add_Click($DemanClick)
+$WPFButton4.Add_Click($DigitalClick)
+$WPFButton5.Add_Click($FaciClick)
+$WPFButton6.Add_Click($FOClick)
+$WPFButton7.Add_Click($HRClick)
+$WPFButton8.Add_Click($ITClick)
+$WPFButton9.Add_Click($ProcessClick)
+$WPFButton10.Add_Click($ProductClick)
+$WPFButton11.Add_Click($SalesClick)
+$WPFButton12.Add_Click($SoftwareClick)
+$WPFButton13.Add_Click($TestClick)
+$WPFButton14.Add_Click($TMGMakeClick)
+$WPFButton15.Add_Click($TMGNonClick)
+$WPFButton16.Add_Click($ValiClick)
+$WPFButton17.Add_Click($WPLClick)
+$WPFButton18.Add_Click($stanClick)
+
+
+$Form.ShowDialog() | out-null
