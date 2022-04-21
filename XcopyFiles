@@ -1,0 +1,39 @@
+#getting profile >
+#Trim Profile Name > to use in directory move files over.....
+
+#need logic to test if folder is there as ....
+
+write-host "Grabbing your profile...." -ForegroundColor Yellow
+
+""
+
+$var = whoami
+
+$var = $var.trim("ID\")
+
+
+write-host "Verifying if an New Hire folder exist....." -ForegroundColor Yellow
+
+""
+
+$path = "C:\Users\$var\Desktop\NHO"
+
+
+
+if(test-path $path){
+    write-host "NHO Folder already exist > Copying NHO Folder to Desktop" -ForegroundColor Green
+    ""
+
+     xcopy "\\Share\BU\NHOFinal\NHO\*"  $path /y
+
+
+}else{
+    write-host "Folder did not exist, creating folder, and copy NHO Folder" -ForegroundColor Yellow
+   New-Item -Path "C:\Users\$var\Desktop\" -Name "NHO" -ItemType "directory"
+
+   xcopy "\\Share\BU\NHOFinal\NHO\*"  $path /y
+
+}
+
+#write-host "Testing to ensure folder exists" # Test Folder
+
