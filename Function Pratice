@@ -1,0 +1,289 @@
+#TEST 1 > GOOD
+#TEST 2 >
+
+$Global:msg = New-Object -ComObject Wscript.Shell
+$Global:pathTemp = "C:\TempFolder"
+
+$Global:OfficePath ="\\Share\Share\share\OfficeStd2019x64.EXE"
+
+function OfficeCheck {
+    [CmdletBinding()]
+    param (
+        [string]$inp
+        
+    )
+    
+    
+    Write-Host "Checking to see if you have access to office x64" -ForegroundColor Yellow
+    ""
+    try{
+        $inp = test-path $Global:OfficePath -ErrorAction SilentlyContinue
+        
+    }catch [System.UnauthorizedAccessException]{
+        return $inp
+    }
+    
+    if($inp){
+        Write-Host "Office is copied " -ForegroundColor Green
+        ""
+        $null = xcopy $Global:OfficePath $Global:pathTemp /y
+        Write-Host "Copied over Office" -ForegroundColor Yellow
+        ""
+    }else{
+        Write-Host "Unable to access the Folder..." -ForegroundColor Red
+        ""
+    }
+
+}
+# -----------------------------     -----------------------------
+function CopyFilesover{
+    [CmdletBinding()]
+    param (
+        
+        [string]$installPath
+        
+
+    )
+    
+    $installPath = "\\Share\Share\NHOFinal\path\*"
+    ""
+    Write-Host "Checking your TempFolder" -ForegroundColor DarkYellow
+    ""
+    if (test-path $Global:pathTemp){
+        Write-Host "Temp Folder Exist, adding files to install" -ForegroundColor Green
+        ""
+                
+        $null = xcopy $installPath $Global:pathTemp /y 
+        Write-Host "Copied over m" -ForegroundColor Yellow
+        ""
+        Write-Host "Copied over m" -ForegroundColor Yellow
+        ""
+    }else{
+        Write-Host "TempFolder  does not Exist" -ForegroundColor Red
+        ""
+        Write-Host "Creating TempFolder..." -ForegroundColor Yellow
+        ""
+        $null = New-Item -Path "c:\" -Name "TempFolder" -ItemType "directory"
+        if (test-path $Global:pathTemp) {
+            Write-Host "Folder has been created and reconfimed" -ForegroundColor Green
+            ""
+            Write-Host "Copying over installer locally" -ForegroundColor Yellow
+            ""
+            
+            $null = xcopy $installPath $Global:pathTemp /y 
+            Write-Host "Copied over m" -ForegroundColor Yellow
+            ""
+            Write-Host "Copied over m" -ForegroundColor Yellow
+            ""
+        }
+        
+
+    }
+}
+#----------------------------    --------------------------
+#learn how to pass variable in functions......
+function RemoveFolder {
+    
+    
+    Write-Host "Reaching out to Temp folder" -ForegroundColor Yellow
+    ""
+    if(test-path $Global:pathTemp){
+        Write-Host "Folder is there now attempting to remove it" -ForegroundColor Red
+        ""
+        Remove-Item -Path $Global:pathTemp -Recurse -Force
+        Write-Host "Folder is gone" -ForegroundColor green
+        ""
+        
+    }else{
+        Write-Host "Folder Never Existed :-0" -ForegroundColor Red
+        ""
+    }
+
+    $msg.Popup("Standard Installation Complete.")
+
+}
+#----------------------------------   ---------------------------
+function allInstall{
+
+    Write-Host "Installing BaseLine Apps" -ForegroundColor Yellow
+    ""
+    #Google Chrome
+try{
+    Write-host "Installing share" -ForegroundColor Yellow
+    ""
+    Start-Process "\\Share\Share\Share\share.EXE" -ArgumentList  "/S" -wait
+    Write-Host "Chrome Install Complete " -ForegroundColor DarkGray
+    ""
+  }
+  catch{
+      
+      Write-Error -Message "ERROR: The share was blocked or Missing.  " -Category InvalidArgument
+  }
+  
+  
+  #Printer
+  try{
+   Write-host "Install Printer " -ForegroundColor Yellow
+   ""
+   Start-Process "\\Share\Share\Share\Share.EXE" -ArgumentList  "/S" -wait
+   Write-Host "Printer Install Complete" -ForegroundColor DarkGray
+   ""
+  }
+  catch{
+   Write-Error -Message "ERROR: The Printer was blocked or Missing.  " -Category InvalidArgument
+      
+  }
+  
+  Start-Process "\\share\share\NHOFinal\DoNotTouch\gpupdate.bat"
+  
+  #
+  try{
+   Write-host "Installing share " -ForegroundColor Yellow
+   ""
+   Start-Process "\\share\share\share\share.EXE" -ArgumentList  "/S" -wait
+   Write-Host "share Install Complete" -ForegroundColor DarkGray
+   ""
+  }
+  catch{
+   Write-Error -Message "ERROR: The Adobe was blocked or Missing.  " -Category InvalidArgument
+      
+  }
+  
+  #
+  try{
+  Write-host "Install share Drive " -ForegroundColor Yellow
+  ""
+  Start-Process "\\Share\Share\Share\ShareDrive.EXE" -ArgumentList  "/S" -wait
+  Start-Process "\\Share\share\Share\Share.EXE" -ArgumentList  "/S" -wait
+  Write-Host "Share install Complete" -ForegroundColor DarkGray
+  ""
+  }
+  catch{
+   Write-Error -Message "ERROR: The Share was blocked or Missing.  " -Category InvalidArgument
+      
+  }
+  
+  #
+  try{
+   Write-host "Installing share" -ForegroundColor Yellow
+   ""
+   Start-Process "\\share\share\share\share.EXE" -ArgumentList  "/S" -wait
+   Start-Process "\\share\share\share\share.EXE" -ArgumentList  "/S" -wait
+   Write-host "Install Complete" -ForegroundColor DarkGray
+   ""
+  }
+  catch{
+   Write-Error -Message "ERROR:  was blocked or Missing.  " -Category InvalidArgument
+      
+  }
+  
+  #
+  try{
+  Write-Host "Installing  " -ForegroundColor Yellow
+  ""
+  Start-Process "\\share\share\share\share.EXE" -ArgumentList  "/S" -wait
+  Write-Host " Install Complete" -ForegroundColor DarkGray
+  ""
+  }
+  catch{
+   Write-Error -Message "ERROR: The  was blocked or Missing.  " -Category InvalidArgument
+      
+  }
+  
+  
+  # 
+  try{
+  Write-host "Installing " -ForegroundColor Yellow
+  ""
+  
+  $webMeet = '/i', "c:\TempFolder\m.msi", '/qr'
+  #$b = Start-Process 'msiexec.exe' $webMeet -wait
+  Start-Process 'msiexec.exe' $webMeet -wait
+  Write-Host " Install Complete" -ForegroundColor DarkGray
+  ""
+  }
+  catch{
+   Write-Error -Message "ERROR: The  was blocked or Missing.  " -Category InvalidArgument
+      
+  }
+  
+  #  
+  try{
+  Write-Host "Installing " -ForegroundColor Yellow
+  ""
+  $webPlug = '/i', "c:\TempFolder\m.msi", '/qr'
+  #$z = Start-Process 'msiexec.exe' $webPlug -wait
+  Start-Process 'msiexec.exe' $webPlug -wait
+  Write-Host " Install Complete" -ForegroundColor DarkGray
+  ""
+  
+  
+  }
+  catch{
+   Write-Error -Message "ERROR: The was blocked or Missing.  " -Category InvalidArgument
+      
+  }
+  
+  #
+  try{
+  Write-Host "Installing share" -ForegroundColor Yellow
+  ""
+  Start-Process "\\share\share\share.bat"
+  Write-Host "share Installed" -ForegroundColor DarkGray
+  ""
+  }
+  catch{
+   Write-Error -Message "ERROR: The share was blocked or Missing.  " -Category InvalidArgument
+      
+  }
+  
+  
+  #
+  try{
+  Write-Host "share Installing" -ForegroundColor Yellow
+  ""
+   Start-Process "\\share\share\share\share.EXE" -ArgumentList  "/S" -wait
+   Write-Host "share Install Complete" -ForegroundColor DarkGray
+   ""
+  }
+  catch{
+   Write-Error -Message "ERROR:  was blocked or Missing.  " -Category InvalidArgument
+      
+  }
+
+  checkinstaller
+  
+}
+
+function checkinstaller {
+    
+    try{
+        $inp = test-path $Global:OfficePath -ErrorAction SilentlyContinue
+        
+    }catch [System.UnauthorizedAccessException]{
+        return $inp
+    }
+    if($inp){
+        Write-Host "Installing Office...." -ForegroundColor Yellow
+        ""
+        start-process "C:\TempFolder\OfficeStd2019x64.EXE" -wait
+        #start-process "\\Share\Share\share\OfficeStd2019x64.EXE" -wait
+        Write-Host "Office Install Complete" -ForegroundColor DarkGray
+        ""
+        }else{
+            Write-Host "Please check Office License then install Your Self..." -ForegroundColor Red
+        }
+
+}
+
+gpupdate /force
+
+CopyFilesover
+
+Start-Process "\\share\share\share\DoNotTouch\gpupdate.bat"
+
+OfficeCheck
+
+allInstall
+
+RemoveFolder
